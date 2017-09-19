@@ -4,7 +4,6 @@ import me.ichun.mods.ichunutil.client.core.EntityTrackerHandler;
 import me.ichun.mods.ichunutil.client.entity.EntityLatchedRenderer;
 import me.ichun.mods.ichunutil.client.gui.config.GuiConfigs;
 import me.ichun.mods.ichunutil.client.keybind.KeyBind;
-import me.ichun.mods.ichunutil.client.module.eula.WindowAnnoy;
 import me.ichun.mods.ichunutil.client.module.patron.LayerPatronEffect;
 import me.ichun.mods.ichunutil.client.module.patron.PatronEffectRenderer;
 import me.ichun.mods.ichunutil.client.module.update.GuiUpdateNotifier;
@@ -72,10 +71,7 @@ public class EventHandlerClient
     protected WorldClient renderGlobalWorldInstance;
 
     //Module stuff
-    //EULA module
-    public boolean eulaDrawEulaNotice = !iChunUtil.config.eulaAcknowledged.equals(RandomStringUtils.random(20, 32, 127, false, false, null, (new Random(Math.abs(Minecraft.getMinecraft().getSession().getPlayerID().replaceAll("-", "").hashCode() + (Math.abs("iChunUtilEULA".hashCode()))))))) && ObfHelper.obfuscated();
-    public WindowAnnoy eulaWindow = new WindowAnnoy();
-
+    
     //Patron module
     public boolean patronUpdateServerAsPatron;
 
@@ -155,28 +151,6 @@ public class EventHandlerClient
         else
         {
             ScaledResolution reso = new ScaledResolution(mc);
-            if(eulaDrawEulaNotice)
-            {
-                int i = Mouse.getX() * reso.getScaledWidth() / mc.displayWidth;
-                int j = reso.getScaledHeight() - Mouse.getY() * reso.getScaledHeight() / mc.displayHeight - 1;
-
-                eulaWindow.posX = reso.getScaledWidth() - eulaWindow.width;
-                eulaWindow.posY = 0;
-                if(eulaWindow.workspace.getFontRenderer() == null)
-                {
-                    eulaWindow.workspace.setWorldAndResolution(mc, mc.displayWidth, mc.displayHeight);
-                    eulaWindow.workspace.initGui();
-                }
-                eulaWindow.draw(i - eulaWindow.posX, j - eulaWindow.posY);
-                if(Mouse.isButtonDown(0))
-                {
-                    eulaWindow.onClick(i - eulaWindow.posX, j - eulaWindow.posY, 0);
-                }
-                if(Keyboard.isKeyDown(Keyboard.KEY_RETURN) || Keyboard.isKeyDown(Keyboard.KEY_NUMPADENTER))
-                {
-                    eulaWindow.elementTriggered(null);
-                }
-            }
             GuiUpdateNotifier.update();
 
             if(mc.currentScreen instanceof GuiControls && !keyBindList.isEmpty())
@@ -246,10 +220,6 @@ public class EventHandlerClient
                         mc.thePlayer.motionY += 0.05F;
                     }
                 }
-            }
-            if(eulaDrawEulaNotice)
-            {
-                eulaWindow.update();
             }
             ticks++;
         }
